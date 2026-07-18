@@ -1111,13 +1111,15 @@ window.addProduct=function(){
  const scaleCode=document.getElementById('fscalecode').value;
  const variantCode=document.getElementById('fvariantcode').value;
  const sku=document.getElementById('fsku').value.trim();
- const priceSGD=parseFloat(document.getElementById('fpsgd').value)||0;
- const costSGD=parseFloat(document.getElementById('fcsgd').value)||0;
+ const fpsgdVal=document.getElementById('fpsgd').value;
+ const fcsgdVal=document.getElementById('fcsgd').value;
+ const priceSGD=fpsgdVal!==''?parseFloat(fpsgdVal):0;
+ const costSGD=fcsgdVal!==''?parseFloat(fcsgdVal):0;
  const price=0;   // PHP sell price — not set from SGD POS, PHP POS will fill this
  const cost=0;    // PHP cost price — not set from SGD POS, PHP POS will fill this
  const stock=parseInt(document.getElementById('fs').value)||0;
  const cat=document.getElementById('fcat').value.trim()||'General';
- if(!name||!priceSGD){alert('Fill in name and sell price (S$).');return false;}
+ if(!name||priceSGD===null||isNaN(priceSGD)){alert('Fill in name and sell price (S$).');return false;}
  const newP={id:'p'+uid(),sku,barcode,brand,make,model,scaleCode,variantCode,name,category:cat,price,priceSGD,cost,costSGD,stock,dateAdded:today()};
  DB.products.push(newP);
  saveProduct(newP);
@@ -1183,9 +1185,11 @@ window.editProduct=function(id){
  p.model=document.getElementById('fmodelcode').value;
  p.scaleCode=document.getElementById('fscalecode').value;
  p.variantCode=document.getElementById('fvariantcode').value;
- p.priceSGD=parseFloat(document.getElementById('fpsgd').value)||p.priceSGD||0;
+ const fpsgdVal=document.getElementById('fpsgd').value;
+ const fcsgdVal=document.getElementById('fcsgd').value;
+ p.priceSGD=fpsgdVal!==''?parseFloat(fpsgdVal):p.priceSGD||0;
  // NOTE: p.price (PHP sell price) is intentionally NOT touched by SGD POS
- p.costSGD=parseFloat(document.getElementById('fcsgd').value)||p.costSGD||0;
+ p.costSGD=fcsgdVal!==''?parseFloat(fcsgdVal):p.costSGD||0;
  // NOTE: p.cost (PHP cost price) is intentionally NOT touched by SGD POS
  p.stock=parseInt(document.getElementById('fs').value)||0;
  p.category=document.getElementById('fcat').value.trim()||p.category;
